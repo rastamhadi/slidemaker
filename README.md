@@ -65,3 +65,10 @@ Run `rake host:url`. This command will print the URL for your slides.
 $ rake host:url
 http://192.168.123.456/~your_name/my_awesome_talk
 ```
+
+## Exporting your slides as a PDF
+
+1. Run `rake pdf`. This will launch your slides in Google Chrome in `print-pdf` mode.
+2. Open the `Print` dialog (`File > Print...`) and `Save as PDF`.
+
+![Print to PDF](https://user-images.githubusercontent.com/1012322/28924083-6653f602-789b-11e7-9a48-ae24d078eb32.png)

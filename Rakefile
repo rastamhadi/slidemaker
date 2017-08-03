@@ -13,6 +13,11 @@ task default: :work
 desc 'Launch the project in Google Chrome, Sublime Text and Guard'
 task work: [:sublime, :chrome, :guard]
 
+desc 'Launch the slides in Google Chrome in print-pdf mode'
+task pdf: :host do |t|
+  sh "open #{url}?print-pdf"
+end
+
 namespace :host do
   desc 'Host the slides locally and print the URL'
   task url: :host do
