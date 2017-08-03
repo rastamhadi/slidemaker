@@ -3,12 +3,25 @@ require 'erb'
 require 'pathname'
 require 'rake/clean'
 
+PROJECT_NAME = Pathname.new(Dir.pwd).basename.freeze
+USERNAME = `whoami`.strip.freeze
+
 SLIDEMAKER_PATH = Pathname.new('../../slidemaker').freeze
 
 task default: :work
 
 desc 'Launch the project in Google Chrome, Sublime Text and Guard'
 task work: [:sublime, :chrome, :guard]
+
+namespace :host do
+  desc 'Host the slides locally and print the URL'
+  task url: :host do
+    puts url
+  end
+end
+
+desc 'Host the slides locally'
+task host: "/Users/#{USERNAME}/Sites/#{PROJECT_NAME}"
 
 desc 'Launch the slides in Google Chrome'
 task chrome: 'slides/index.html' do |t|
@@ -27,6 +40,12 @@ end
 
 desc 'Generate a new reveal-ck project'
 task init: ['Gemfile.lock', 'Guardfile', 'slides/index.html']
+
+SYM_LINK_PATH = "/Users/#{USERNAME}/Sites/#{PROJECT_NAME}".freeze
+file SYM_LINK_PATH => 'slides/index.html' do |t|
+  sh "ln -s #{Pathname.new(t.source).parent.realpath} #{t.name}"
+end
+CLOBBER.include(SYM_LINK_PATH)
 
 file 'slides/index.html' => 'slides.md' do
   sh 'reveal-ck generate'
@@ -62,6 +81,10 @@ file '.ruby-version' do
   sh "rbenv versions | tail -n1 | awk '{$1=$1};1' > .ruby-version"
 end
 CLOBBER.include('.ruby-version')
+
+def url
+  "http://#{`ipconfig getifaddr en0`.strip}/~#{USERNAME}/#{PROJECT_NAME}"
+end
 
 def render_erb(erb_path, out_path, title)
   erb = ERB.new(File.read(erb_path)).result(binding)

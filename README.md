@@ -4,12 +4,14 @@
 
 ## Prerequisites
 
+* macOS
 * Ruby
 * rbenv
 * Sublime Text
 * bundler
 * Google Chrome
 * The [LiveReload](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei) Chrome extension
+* Apache set up as in [this article](https://medium.com/@rastamhadi/how-i-host-lightning-talk-slides-from-my-imac-7b00912e15a5)
 
 ## Installation
 
@@ -57,4 +59,9 @@ $ git clone git@github.com:rastamhadi/slidemaker.git
 
 ## Hosting your slides locally
 
-:construction: Coming Soon! :construction:
+Run `rake host:url`. This command will print the URL for your slides.
+
+```
+$ rake host:url
+http://192.168.123.456/~your_name/my_awesome_talk
+```
