@@ -5,6 +5,8 @@
 ## Prerequisites
 
 * macOS
+* Git
+* [gitsh](https://github.com/thoughtbot/gitsh)
 * Ruby
 * rbenv
 * Sublime Text
@@ -12,6 +14,7 @@
 * Google Chrome
 * The [LiveReload](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei) Chrome extension
 * Apache set up as in [this article](https://medium.com/@rastamhadi/how-i-host-lightning-talk-slides-from-my-imac-7b00912e15a5)
+* A [Bitbucket](https://bitbucket.org/) account for privately storing your slidedeck project
 
 ## Installation
 
@@ -56,6 +59,12 @@ $ git clone git@github.com:rastamhadi/slidemaker.git
    * [Guard](http://guardgem.org/)
 
 2. Enable your LiveReload extension to refresh your slides on the fly.
+
+## Version control with Bitbucket
+
+Run `rake gitsh` to launch the project in gitsh.
+
+Don't forget to [create a new Bitbucket repository](https://bitbucket.org/repo/create) if you don't have one already.
 
 ## Hosting your slides locally
 

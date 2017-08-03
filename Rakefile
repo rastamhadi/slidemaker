@@ -38,6 +38,11 @@ task guard: :init do
   sh 'rbenv exec bundle exec guard'
 end
 
+desc 'Launch gitsh'
+task gitsh: '.git/refs/remotes' do
+  sh 'gitsh'
+end
+
 desc 'Launch the project in Sublime Text'
 task sublime: :init do
   sh 'sublime .'
@@ -45,6 +50,16 @@ end
 
 desc 'Generate a new reveal-ck project'
 task init: ['Gemfile.lock', 'Guardfile', 'slides/index.html']
+
+file '.git/refs/remotes' => '.git' do
+  puts 'What is your Bitbucket username?'
+  username = $stdin.gets.chomp
+  sh "git remote add origin git@bitbucket.org:#{username}/#{PROJECT_NAME}.git"
+end
+
+file '.git' do
+  sh 'git init'
+end
 
 SYM_LINK_PATH = "/Users/#{USERNAME}/Sites/#{PROJECT_NAME}".freeze
 file SYM_LINK_PATH => 'slides/index.html' do |t|
