@@ -15,6 +15,7 @@
 * The [LiveReload](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei) Chrome extension
 * Apache set up as in [this article](https://medium.com/@rastamhadi/how-i-host-lightning-talk-slides-from-my-imac-7b00912e15a5)
 * A [Bitbucket](https://bitbucket.org/) account for privately storing your slidedeck project
+* A [GitHub Pages](https://pages.github.com/) repository for publicly hosting your slides
 
 ## Installation
 
@@ -81,3 +82,11 @@ http://192.168.123.456/~your_name/my_awesome_talk
 2. Open the `Print` dialog (`File > Print...`) and `Save as PDF`.
 
 ![Print to PDF](https://user-images.githubusercontent.com/1012322/28924083-6653f602-789b-11e7-9a48-ae24d078eb32.png)
+
+## Extracting and publishing static assets on GitHub Pages
+
+These tasks assume that your GitHub Pages repository is named `slides` and that it is located in the same directory as your slidedeck project.
+
+1. Run `rake static:extract`. This will copy all static assets into your GitHub Pages repository.
+2. Run `rake static:sublime` and adjust your slidedeck's README to your liking.
+3. Run `rake static:gitsh` to launch your static assets project in gitsh. Commit and push your changes to deploy your slides.

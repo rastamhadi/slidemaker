@@ -7,6 +7,7 @@ PROJECT_NAME = Pathname.new(Dir.pwd).basename.freeze
 USERNAME = `whoami`.strip.freeze
 
 SLIDEMAKER_PATH = Pathname.new('../../slidemaker').freeze
+PUBLIC_PATH = Pathname.new("../slides/#{PROJECT_NAME}").freeze
 
 task default: :work
 
@@ -16,6 +17,38 @@ task work: [:sublime, :chrome, :guard]
 desc 'Launch the slides in Google Chrome in print-pdf mode'
 task pdf: :host do |t|
   sh "open #{url}?print-pdf"
+end
+
+namespace :static do
+  desc 'Extract static assets into a public project'
+  task extract: [PUBLIC_PATH, 'config.yml'] do
+    if PUBLIC_PATH.empty?
+      title = YAML.load_file('config.yml')['title']
+      unknown_file = PUBLIC_PATH.join('slides')
+
+      cp_r 'slides/.', PUBLIC_PATH
+      rm unknown_file if unknown_file.exist?
+      render_erb(SLIDEMAKER_PATH.join('erb', 'README.md.erb'), PUBLIC_PATH.join('README.md'), title)
+      open(PUBLIC_PATH.parent.join('README.md'), 'a') do |readme|
+        readme << "* [#{title}](https://rastamhadi.github.io/slides/#{PROJECT_NAME})\n"
+      end
+    end
+  end
+  CLOBBER.include(PUBLIC_PATH)
+
+  desc 'Launch extracted static assets project in gitsh'
+  task gitsh: PUBLIC_PATH do
+    cd PUBLIC_PATH do
+      sh 'gitsh'
+    end
+  end
+
+  desc 'Launch extracted static assets project in Sublime Text'
+  task sublime: PUBLIC_PATH do
+    cd PUBLIC_PATH do
+      sh 'sublime .'
+    end
+  end
 end
 
 namespace :host do
@@ -101,6 +134,8 @@ file '.ruby-version' do
   sh "rbenv versions | tail -n1 | awk '{$1=$1};1' > .ruby-version"
 end
 CLOBBER.include('.ruby-version')
+
+directory PUBLIC_PATH
 
 def url
   "http://#{`ipconfig getifaddr en0`.strip}/~#{USERNAME}/#{PROJECT_NAME}"
