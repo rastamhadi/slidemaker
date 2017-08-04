@@ -7,7 +7,7 @@ PROJECT_NAME = Pathname.new(Dir.pwd).basename.freeze
 USERNAME = `whoami`.strip.freeze
 
 SLIDEMAKER_PATH = Pathname.new('../../slidemaker').freeze
-PUBLIC_PATH = Pathname.new("../slides/#{PROJECT_NAME}").freeze
+PUBLIC_PATH = Pathname.new("../../public_slides/#{PROJECT_NAME}").freeze
 
 task default: :work
 
@@ -15,7 +15,7 @@ desc 'Launch the project in Google Chrome, Sublime Text and Guard'
 task work: [:sublime, :chrome, :guard]
 
 desc 'Launch the slides in Google Chrome in print-pdf mode'
-task pdf: :host do |t|
+task pdf: :host do
   sh "open #{url}?print-pdf"
 end
 
@@ -72,7 +72,7 @@ task guard: :init do
 end
 
 desc 'Launch gitsh'
-task gitsh: '.git/refs/remotes' do
+task gitsh: :init do
   sh 'gitsh'
 end
 
@@ -83,16 +83,6 @@ end
 
 desc 'Generate a new reveal-ck project'
 task init: ['Gemfile.lock', 'Guardfile', 'slides/index.html']
-
-file '.git/refs/remotes' => '.git' do
-  puts 'What is your Bitbucket username?'
-  username = $stdin.gets.chomp
-  sh "git remote add origin git@bitbucket.org:#{username}/#{PROJECT_NAME}.git"
-end
-
-file '.git' do
-  sh 'git init'
-end
 
 SYM_LINK_PATH = "/Users/#{USERNAME}/Sites/#{PROJECT_NAME}".freeze
 file SYM_LINK_PATH => 'slides/index.html' do |t|
@@ -143,5 +133,5 @@ end
 
 def render_erb(erb_path, out_path, title)
   erb = ERB.new(File.read(erb_path)).result(binding)
-  open(out_path, "w+") { |f| f.write(erb) }
+  open(out_path, 'w+') { |f| f.write(erb) }
 end
